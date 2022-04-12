@@ -1,7 +1,10 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 type PropsType = {
-    callBack: (title: string)=>void
+    callBack: (title: string) => void
 }
 
 export const AddItemForm = (props: PropsType) => {
@@ -32,14 +35,27 @@ export const AddItemForm = (props: PropsType) => {
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}
+            {/*<input value={title}*/}
+            {/*       onChange={onChangeHandler}*/}
+            {/*       onKeyPress={onKeyPressHandler}*/}
+            {/*       className={error ? "error" : ""}*/}
+            {/*/>*/}
+
+            <TextField id="outlined-basic" label={error} variant="outlined" size={'small'}
+                       onChange={onChangeHandler}
+                       onKeyPress={onKeyPressHandler}
+                       error={!!error}
             />
-            <button onClick={addTask}>+</button>
-            {error && <div className="error-message">{error}</div>}
+
+            {/*backgroundColor: 'gray', opacity: 0.3,*/}
+            <IconButton style={{ maxWidth: '15px', maxHeight: '15px', minWidth: '15px', minHeight: '15px' }} onClick={addTask}>
+                <AddIcon/>
+            </IconButton>
+
+
+
+                {/*{error && <div className="error-message">{error}</div>}*/}
         </div>
-    );
+);
 };
 

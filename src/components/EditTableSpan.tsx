@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import {TextField} from "@material-ui/core";
 
 type EditTableSpanType = {
     oldTitle: string
@@ -25,8 +26,11 @@ export const EditTableSpan = (props: EditTableSpanType) => {
 
     return (
         edit
-            ? <input value={newTitle} onChange={onChangeHandler} autoFocus={true} onBlur={onBlurHandler}/>
+            // ? <input value={newTitle} onChange={onChangeHandler} autoFocus={true} onBlur={onBlurHandler}/>
+            // ? <TextField id="standard-basic" label="Input new title" onChange={onChangeHandler} autoFocus={true} onBlur={onBlurHandler}/>
+            ? <TextField id="filled-basic" label="New Title" variant="filled" size={'small'} onChange={onChangeHandler} autoFocus={true} onBlur={onBlurHandler}/>
             : <span onDoubleClick={onDoubleClickHandler}>{newTitle}</span>
     );
 };
+
 
