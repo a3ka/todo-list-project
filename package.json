@@ -2,6 +2,8 @@
   "name": "it-incubator-todolist-ts",
   "version": "0.1.0",
   "private": true,
+  "homepage":"https://a3ka.github.io/todo-list-project/",
+
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
@@ -27,7 +29,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "eslintConfig": {
+  "eslintconfig": {
     "extends": "react-app"
   },
   "browserslist": {
@@ -42,7 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
+  "devdependencies": {
     "gh-pages": "^3.2.3"
   }
 }

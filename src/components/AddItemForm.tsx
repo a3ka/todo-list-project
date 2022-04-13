@@ -42,6 +42,7 @@ export const AddItemForm = (props: PropsType) => {
             {/*/>*/}
 
             <TextField id="outlined-basic" label={error} variant="outlined" size={'small'}
+                       value={title}
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
                        error={!!error}
