@@ -1,136 +1,64 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
-import {AddItemForm} from "./AddItemForm";
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
-import {Menu} from "@material-ui/icons";
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC,
-    removeTodolistAC,
-} from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC,} from "./state/tasks-reducer";
+import {AddForm} from "./components/AddForm/AddForm";
+import {AppBar, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
+import MenuIcon from '@material-ui/icons/Menu';
+import {addTodolistAC} from "./state/todolistsReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store/store";
+import {RootStateType} from "./state/store";
 
-export type FilterValuesType = "all" | "active" | "completed";
+export type FilterType = "all" | "active" | "completed" | "";
 export type TodolistType = {
     id: string
     title: string
-    filter: FilterValuesType
+    filter: string
 }
 
-export type TaskStateType = {
-    [todolistId: string]: Array<TaskType>
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
 }
 
-function App() {
+export function App() {
 
-    const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const todolists = useSelector<RootStateType, TodolistType[]>(state => state.todolists);
 
-    function removeTask(taskId: string, todolistId: string) {
-        dispatch(removeTaskAC(taskId, todolistId))
-    }
-
-    function addTask(title: string, todolistId: string) {
-        dispatch(addTaskAC(title, todolistId))
-    }
-
-    function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
-        dispatch(changeTaskStatusAC(taskId, isDone, todolistId))
-    }
-
-    function changeTaskTitle(taskId: string, newTitle: string, todolistId: string) {
-        dispatch(changeTaskTitleAC(taskId, newTitle, todolistId))
-    }
-
-    function changeFilter(todolistId: string, filter: FilterValuesType) {
-        dispatch(changeTodolistFilterAC(todolistId, filter))
-    }
-
-    function ChangeTodolistTitle(todolistId: string, newTitle: string) {
-        dispatch(changeTodolistTitleAC(todolistId, newTitle))
-    }
-
-    function removeTodolist(todolistId: string) {
-        dispatch(removeTodolistAC(todolistId))
-    }
-
-    function addTodolist(title: string) {
-        dispatch(addTodolistAC(title))
-    }
-
-    const todolistComponents = todolists.map(tl => {
-
-        let tasksForTodolist = tasks[tl.id];
-
-        if (tl.filter === "active") {
-            tasksForTodolist = tasks[tl.id].filter(t => !t.isDone);
-        }
-        if (tl.filter === "completed") {
-            tasksForTodolist = tasks[tl.id].filter(t => t.isDone);
-        }
-
-        return (
-            <Grid item key={tl.id}>
-                <Paper style={{padding: "20px"}}>
-                    <Todolist
-                        key={tl.id}
-                        todolist={tl}
-                    />
-                </Paper>
-            </Grid>
-        )
-    })
-
+    const addTodoList = useCallback((titleOfTodolist: string) => {
+        dispatch(addTodolistAC(titleOfTodolist));
+    }, [dispatch]);
 
     return (
         <div className="App">
             <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu/>
+                <Toolbar variant="dense">
+                    <IconButton edge="start" color="inherit">
+                        <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6">
-                        News
+                    <Typography variant="h5" color="inherit" component="div">
+                        Todolist
                     </Typography>
-                    <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding: "20px"}}>
-                    <AddItemForm addItem={addTodolist}/>
+                <Grid container style={{padding: "15px"}}>
+                    <AddForm name={"add todolist"} callback={addTodoList}/>
                 </Grid>
-                <Grid container spacing={3}>
-                    {
-                        todolists.map(tl => {
-                            let allTodolistTasks = tasks[tl.id];
-                            let tasksForTodolist = allTodolistTasks;
-
-                            if (tl.filter === "active") {
-                                tasksForTodolist = allTodolistTasks.filter(t => t.isDone === false);
-                            }
-                            if (tl.filter === "completed") {
-                                tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
-                            }
-
-                            return <Grid item>
-                                <Paper style={{padding: "10px"}}>
+                <Grid container spacing={7}>
+                    {todolists.map((m:TodolistType) => {
+                        return (
+                            <Grid item key={m.id}>
+                                <Paper elevation={4} style={{padding: "20px"}}>
                                     <Todolist
-                                        key={tl.id}
-                                        todolist={tl}
+                                        todolist={m}
+                                        key={m.id}
                                     />
                                 </Paper>
                             </Grid>
-                        })
-                    }
+                        )
+                    })}
                 </Grid>
             </Container>
         </div>
     );
 }
-
-export default App;
