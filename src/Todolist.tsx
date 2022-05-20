@@ -24,7 +24,9 @@ type PropsType = {
 
 export const Todolist = React.memo((props: PropsType) => {
     const {todolist} = props;
+    
     let tasks = useSelector<RootStateType, TaskType[]>(state => state.tasks[todolist.id]);
+    
     const [filter, setFilter] = useState<FilterType>("all");
 
     const dispatch = useDispatch();
@@ -73,7 +75,8 @@ export const Todolist = React.memo((props: PropsType) => {
                 </IconButton>
             </h3>
             <div>
-                <AddForm name={"add task"} callback={addTask}/>
+                {/*<AddForm name={"add task"} callback={addTask}/>*/}
+                <AddForm callback={addTask}/>
             </div>
             <div>
                 {tasks.map(m => {

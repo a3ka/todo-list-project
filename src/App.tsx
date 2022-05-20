@@ -42,7 +42,8 @@ export function App() {
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: "15px"}}>
-                    <AddForm name={"add todolist"} callback={addTodoList}/>
+                    {/*<AddForm name={"add todolist"} callback={addTodoList}/>*/}
+                    <AddForm callback={addTodoList}/>
                 </Grid>
                 <Grid container spacing={7}>
                     {todolists.map((m:TodolistType) => {

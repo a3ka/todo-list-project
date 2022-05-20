@@ -6,7 +6,7 @@ import s from "./AddForm.module.css"
 
 type AddFormPropsType = {
     callback: (title: string) => void,
-    name: string,
+    // name: string,
 }
 
 export const AddForm = React.memo((props: AddFormPropsType) => {
