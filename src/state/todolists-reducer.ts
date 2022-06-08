@@ -110,4 +110,41 @@ export const fetchTodosTC = () => (dispatch: Dispatch, getState: () => AppRootSt
         })
 }
 
+// @ts-ignore
+export const changeTodolistTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
 
+    const state = getState()
+    const allAppTodolists = state.todolists
+    const changedTodolist = allAppTodolists.find((t:TodolistType) => {
+        return t.id === todolistId
+    })
+
+   
+    todolistsAPI.updateTodolist(todolistId, title)
+        .then(()=>{
+            dispatch(changeTodolistTitleAC(todolistId, title))
+        })
+}
+
+
+export const removeTodolistTC = (todolistId: string) => {
+    // @ts-ignore
+    return (dispatch: Dispatch) => {
+        todolistsAPI.deleteTodolist(todolistId)
+            .then(() => {
+                dispatch(removeTodolistAC(todolistId))
+
+            })
+    }
+}
+
+export const addTodolistTC = (title: string) => {
+
+    // @ts-ignore
+    return (dispatch: Dispatch) => {
+        todolistsAPI.createTodolist(title)
+            .then((res) => {
+                dispatch(addTodolistAC(title))
+            })
+    }
+}
