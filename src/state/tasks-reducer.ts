@@ -3,6 +3,7 @@ import {v1} from 'uuid';
 import {AddTodolistActionType, RemoveTodolistActionType, setTodoActionType} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/todolists-api'
 import {Dispatch} from 'react';
+import { setAppStatusAC } from './app-reducer';
 
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK',
@@ -163,12 +164,14 @@ export const fetchTasksTC = (todolistId: string) => {
 }
 
 export const removeTaskTC = (taskId: string, todolistId: string) => {
-    console.log('remove')
     // @ts-ignore
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.deleteTask(todolistId, taskId)
             .then((res) => {
                 dispatch(removeTaskAC(taskId, todolistId))
+                dispatch(setAppStatusAC('succeeded'))
+
             })
     }
 }
@@ -177,10 +180,12 @@ export const addTaskTC = (title: string, todolistId: string) => {
 
     // @ts-ignore
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.createTask(todolistId, title)
             .then((res) => {
                 const newTask = res.data.data.item
                 dispatch(addTaskAC(newTask))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
@@ -204,9 +209,11 @@ export const updateTaskStatusTC = (taskId: string, todolistId: string, status: T
 
     }
 
+    dispatch(setAppStatusAC('loading'))
     todolistsAPI.updateTask(todolistId, taskId, model)
         .then(()=>{
             dispatch(changeTaskStatusAC(taskId, status, todolistId))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 

@@ -11,6 +11,8 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { Menu } from '@mui/icons-material';
+import LinearProgress from '@mui/material/LinearProgress';
+
 import {
     addTodolistTC,
     changeTodolistFilterAC,
@@ -22,7 +24,7 @@ import {
 } from './state/todolists-reducer'
 import { addTaskTC, changeTaskTitleTC, removeTaskTC, updateTaskStatusTC } from './state/tasks-reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStateType } from './state/store';
+import { AppRootStateType, useAppSelector } from './state/store';
 import { TaskStatuses, TaskType } from './api/todolists-api'
 
 
@@ -36,6 +38,9 @@ function App() {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
+
+    // with useAppSelector we can replace useSelector<an typisation>
+    const status = useAppSelector(status => status.app.status)
 
     useEffect(() => {
         dispatch(fetchTodosTC())
@@ -87,6 +92,7 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
+            {status === 'loading' && <LinearProgress color="secondary"/>}
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
                     <AddItemForm addItem={addTodolist}/>

@@ -1,6 +1,7 @@
 import {Dispatch} from 'react';
 import {v1} from 'uuid';
 import {todolistsAPI, TodolistType} from '../api/todolists-api'
+import { setAppStatusAC } from './app-reducer';
 import {AppRootStateType} from './store';
 
 
@@ -104,9 +105,11 @@ export const setTodolistAC = (todos: TodolistType[]) => {
 
 // @ts-ignore
 export const fetchTodosTC = () => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+    dispatch(setAppStatusAC('loading'))
     todolistsAPI.getTodolists()
         .then((res) => {
             dispatch(setTodolistAC(res.data))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
@@ -119,10 +122,11 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => (dis
         return t.id === todolistId
     })
 
-   
+    dispatch(setAppStatusAC('loading'))
     todolistsAPI.updateTodolist(todolistId, title)
         .then(()=>{
             dispatch(changeTodolistTitleAC(todolistId, title))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
@@ -130,9 +134,11 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => (dis
 export const removeTodolistTC = (todolistId: string) => {
     // @ts-ignore
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.deleteTodolist(todolistId)
             .then(() => {
                 dispatch(removeTodolistAC(todolistId))
+                dispatch(setAppStatusAC('succeeded'))
 
             })
     }
@@ -142,9 +148,11 @@ export const addTodolistTC = (title: string) => {
 
     // @ts-ignore
     return (dispatch: Dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.createTodolist(title)
             .then((res) => {
                 dispatch(addTodolistAC(title))
+                dispatch(setAppStatusAC('succeeded'))
             })
     }
 }
