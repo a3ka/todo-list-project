@@ -4,6 +4,7 @@ import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
 import {AppActionsType, setAppErrorAC, setAppStatusAC} from '../../app/app-reducer'
 import { AxiosError } from 'axios'
+import { handleServerNetworkError } from '../../utils/error-utils'
 
 const initialState: TasksStateType = {}
 
@@ -86,11 +87,14 @@ export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispa
             }
         })
         .catch((err: AxiosError) => {
-            dispatch(setAppErrorAC(err.message))
+            handleServerNetworkError(err.message, dispatch)
         })
-        .finally(() => {
-            dispatch(setAppStatusAC('idle'))
-        })
+        // .catch((err: AxiosError) => {
+        //     dispatch(setAppErrorAC(err.message))
+        // })
+        // .finally(() => {
+        //     dispatch(setAppStatusAC('idle'))
+        // })
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
